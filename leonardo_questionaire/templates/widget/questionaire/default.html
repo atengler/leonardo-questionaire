@@ -1,0 +1,33 @@
+{% extends widget.get_base_template %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load questionaire_tags %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+  {% submitted request.user widget.form as submitted %}
+  {% if submitted %}
+  <div class="well well-info">
+    {% if widget.success_message %}
+    <p>{{ widget.success_message|safe }}</p>
+    {% else %}
+    <p>{% trans "Thank you for submitting our questionaire!" %}</p>
+    {% endif %}
+  </div>
+  {% else %}  
+  <div id="form{{ widget.id }}" class="{{ widget.formclass }}">
+    {% if form %}
+    {% crispy form %}
+    {% else %}
+    {{ message|safe }}
+    {% endif %}
+  </div>
+  {% endif %}
+{% else %}
+<div class="well well-info">
+  <p>{% trans "You need to be logged in to submit this form." %}</p>
+</div>
+{% endif %}
+{% endblock %}
+
