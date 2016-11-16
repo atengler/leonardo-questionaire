@@ -9,9 +9,12 @@ register = template.Library()
 
 @register.assignment_tag()
 def submitted(user, form):
+    if not user or not form:
+        return None
     return QuestionaireSubmission.objects.filter(
         submission__form=form,
         submitted_by=user).exists()
+
 
 @register.assignment_tag()
 def get_questionaire(title):
@@ -24,6 +27,7 @@ def get_questionaire(title):
         'form': Form.objects.filter(title=title).first(),
         'url': url
     }
+
 
 @register.assignment_tag()
 def get_default_questionaire():
